@@ -61,71 +61,124 @@ html, body, [class*="css"] {
 .job-card {
     background: linear-gradient(135deg, #1a1a2e, #16213e);
     border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 20px;
+    padding: 28px;
+    margin-bottom: 24px;
     border-left: 5px solid #e94560;
     box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    transition: transform 0.2s;
-}
-.job-card:hover {
-    transform: translateY(-3px);
 }
 .job-title {
     font-family: 'Syne', sans-serif;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 800;
     color: #ffffff;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 .match-badge {
     display: inline-block;
-    padding: 4px 14px;
+    padding: 5px 16px;
     border-radius: 20px;
     font-weight: 700;
-    font-size: 0.85rem;
-    margin-bottom: 14px;
+    font-size: 0.88rem;
+    margin-bottom: 16px;
 }
 .match-high   { background: #1a472a; color: #2ecc71; }
 .match-medium { background: #7d5a00; color: #f5a623; }
 .match-low    { background: #4a1528; color: #e94560; }
 
-.info-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-bottom: 12px;
-}
-.info-chip {
-    background: rgba(255,255,255,0.07);
-    border-radius: 8px;
-    padding: 6px 14px;
-    font-size: 0.85rem;
-    color: #ccc;
-}
-.info-chip span { color: #f5a623; font-weight: 600; }
-
-.reason-box {
-    background: rgba(233,69,96,0.08);
-    border: 1px solid rgba(233,69,96,0.25);
-    border-radius: 10px;
-    padding: 10px 16px;
-    font-size: 0.88rem;
-    color: #ddd;
-    margin-top: 10px;
-}
-.reason-box b { color: #e94560; }
-
 /* Progress bar */
 .bar-bg {
     background: rgba(255,255,255,0.1);
     border-radius: 6px;
-    height: 8px;
-    margin-bottom: 14px;
+    height: 10px;
+    margin-bottom: 20px;
 }
 .bar-fill {
-    height: 8px;
+    height: 10px;
     border-radius: 6px;
     background: linear-gradient(90deg, #e94560, #f5a623);
+}
+
+/* Detail rows */
+.detail-section {
+    margin-bottom: 14px;
+}
+.detail-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #f5a623;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+.detail-value {
+    font-size: 1rem;
+    color: #f0f0f0;
+    line-height: 1.5;
+}
+.detail-value.salary {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #2ecc71;
+}
+
+/* Skills pills */
+.skills-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+}
+.skill-pill {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+.skill-matched {
+    background: rgba(46,204,113,0.15);
+    color: #2ecc71;
+    border: 1px solid rgba(46,204,113,0.4);
+}
+.skill-missing {
+    background: rgba(245,166,35,0.1);
+    color: #f5a623;
+    border: 1px solid rgba(245,166,35,0.3);
+}
+
+/* Companies row */
+.companies-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+}
+.company-tag {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 0.82rem;
+    color: #ccc;
+}
+
+/* Tip box */
+.tip-box {
+    background: rgba(233,69,96,0.07);
+    border: 1px solid rgba(233,69,96,0.2);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    color: #ddd;
+    margin-top: 16px;
+    line-height: 1.6;
+}
+.tip-box b { color: #e94560; }
+
+/* Divider */
+.divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    margin: 16px 0;
 }
 
 /* Empty / warning */
@@ -146,7 +199,7 @@ html, body, [class*="css"] {
     color: #f0f0f0;
     border-bottom: 2px solid #e94560;
     padding-bottom: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 /* Streamlit overrides */
@@ -184,7 +237,7 @@ df = load_data()
 st.markdown("""
 <div class="hero">
     <h1>🚀 Job Recommender</h1>
-    <p>Enter your skills — we'll match you with the best career paths, salaries & top companies.</p>
+    <p>Enter your skills — we'll match you with the best career paths, salaries &amp; top companies.</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -198,7 +251,7 @@ user_input = st.text_input(
 
 recommend_clicked = st.button("🔍 Find My Best Jobs")
 
-# ── Logic ──────────────────────────────────────────────────────────────────────
+# ── Recommend Logic ──────────────────────────────────────────────────────────────────
 if recommend_clicked:
     if not user_input.strip():
         st.markdown('<div class="warn-box">⚠️ Please enter at least one skill to get recommendations.</div>', unsafe_allow_html=True)
@@ -227,50 +280,96 @@ if recommend_clicked:
             for i, (_, row) in enumerate(results.iterrows()):
                 match = round(row["Match %"], 1)
 
+                # Badge and verdict
                 if match >= 60:
-                    badge_cls = "match-high"
+                    badge_cls   = "match-high"
                     badge_label = f"🟢 {match}% Match"
-                    verdict = "Excellent fit"
+                    verdict     = "Excellent Fit"
                 elif match >= 30:
-                    badge_cls = "match-medium"
+                    badge_cls   = "match-medium"
                     badge_label = f"🟡 {match}% Match"
-                    verdict = "Good fit"
+                    verdict     = "Good Fit"
                 else:
-                    badge_cls = "match-low"
+                    badge_cls   = "match-low"
                     badge_label = f"🔴 {match}% Match"
-                    verdict = "Partial fit — upskilling recommended"
+                    verdict     = "Partial Fit — Upskilling Recommended"
 
-                # Find matching skills for reason
-                job_skills = [s.strip().lower() for s in row["Skills"].split(",")]
-                matched = [s for s in user_skills_list if any(s in js for js in job_skills)]
-                missing  = [s.title() for s in job_skills if not any(u in s for u in user_skills_list)]
+                # Skills comparison
+                job_skills    = [s.strip().lower() for s in str(row["Skills"]).split(",")]
+                matched_skills = [s.strip().title() for s in user_skills_list if any(s in js for js in job_skills)]
+                missing_skills = [s.strip().title() for s in job_skills if not any(u in s for u in user_skills_list)]
 
-                matched_str = ", ".join([s.title() for s in matched]) if matched else "General alignment"
-                missing_str = ", ".join(missing[:3]) if missing else "None"
+                matched_pills = "".join(
+                    [f'<span class="skill-pill skill-matched">✓ {s}</span>' for s in matched_skills]
+                ) if matched_skills else '<span style="color:#aaa; font-size:0.88rem;">General alignment with job requirements</span>'
+
+                missing_pills = "".join(
+                    [f'<span class="skill-pill skill-missing">+ {s}</span>' for s in missing_skills[:5]]
+                ) if missing_skills else '<span style="color:#2ecc71; font-size:0.88rem;">🎉 You already cover all key skills!</span>'
+
+                # Companies as tags
+                companies     = [c.strip() for c in str(row["Companies"]).split(",")]
+                company_tags  = "".join([f'<span class="company-tag">{c}</span>' for c in companies])
 
                 bar_width = min(int(match), 100)
+                crown     = "🥇" if i == 0 else f"#{i+1}"
 
                 st.markdown(f"""
                 <div class="job-card">
-                    <div class="job-title">{'🥇' if i==0 else '🔹'} {row['Job Title']}</div>
-                    <span class="match-badge {badge_cls}">{badge_label} — {verdict}</span>
 
-                    <div class="bar-bg"><div class="bar-fill" style="width:{bar_width}%"></div></div>
+                    <!-- Title & Badge -->
+                    <div class="job-title">{crown} &nbsp;{row['Job Title']}</div>
+                    <span class="match-badge {badge_cls}">{badge_label} &nbsp;—&nbsp; {verdict}</span>
 
-                    <div class="info-row">
-                        <div class="info-chip">💰 <span>Salary:</span> {row['Salary Range']}</div>
-                        <div class="info-chip">🏢 <span>Top Companies:</span> {row['Companies']}</div>
+                    <!-- Match Progress Bar -->
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="width:{bar_width}%"></div>
                     </div>
 
-                    <div class="info-chip" style="margin-bottom:12px; display:block;">
-                        📋 <span>Role:</span> {row['Description']}
+                    <!-- Role Description -->
+                    <div class="detail-section">
+                        <div class="detail-label">📋 What You'll Do</div>
+                        <div class="detail-value">{row['Description']}</div>
                     </div>
 
-                    <div class="reason-box">
-                        <b>💡 Why this job?</b><br>
-                        Your skills in <b>{matched_str}</b> are a strong match for this role.<br>
-                        {'<b>📚 Skills to add:</b> ' + missing_str if missing_str != 'None' else '✅ You already cover the key skills!'}
+                    <hr class="divider">
+
+                    <!-- Salary -->
+                    <div class="detail-section">
+                        <div class="detail-label">💰 Expected Salary</div>
+                        <div class="detail-value salary">{row['Salary Range']}</div>
                     </div>
+
+                    <hr class="divider">
+
+                    <!-- Companies -->
+                    <div class="detail-section">
+                        <div class="detail-label">🏢 Top Companies Hiring</div>
+                        <div class="companies-row">{company_tags}</div>
+                    </div>
+
+                    <hr class="divider">
+
+                    <!-- Your Matching Skills -->
+                    <div class="detail-section">
+                        <div class="detail-label">✅ Your Matching Skills</div>
+                        <div class="skills-wrap">{matched_pills}</div>
+                    </div>
+
+                    <!-- Skills to Learn -->
+                    <div class="detail-section" style="margin-top:14px;">
+                        <div class="detail-label">📚 Skills to Learn / Add</div>
+                        <div class="skills-wrap">{missing_pills}</div>
+                    </div>
+
+                    <!-- Tip -->
+                    <div class="tip-box">
+                        <b>💡 Career Tip:</b>
+                        {'You are a strong candidate for this role. Apply confidently and highlight your experience with ' + (', '.join(matched_skills[:3]) if matched_skills else 'relevant projects') + '.' if match >= 60 else
+                         'You have a good foundation. Strengthening your skills in ' + (', '.join(missing_skills[:2]) if missing_skills else 'related areas') + ' will make you much more competitive.' if match >= 30 else
+                         'This role needs some additional skills. Focus on learning ' + (', '.join(missing_skills[:3]) if missing_skills else 'the required skills') + ' through online courses or projects.'}
+                    </div>
+
                 </div>
                 """, unsafe_allow_html=True)
 
